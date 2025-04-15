@@ -1,0 +1,70 @@
+Multithreading -  is a way to run multiple tasks at the same time within the same program. Each "task" runs in a separate thread.
+
+Use for:
+1) File reads/writes
+2) Network requests
+3) User input
+4) Database operations
+
+Real-world Application Examples:
+1) Web Crawlers / Scrapers
+- Fetch many web pages at once using threads.
+2) Chat Applications
+- One thread listens for messages, another handles user input.
+3) Downloading Multiple Files
+- Download files in parallel instead of one by one.
+4) Games
+- One thread for game logic, one for rendering, another for handling inputs.
+5) Server Monitoring Tools
+- Continuously collect logs or metrics from multiple sources at the same time.
+
+If you’re doing heavy CPU calculations (like matrix operations, ML models), 
+multithreading won’t help much in Python because of the GIL. Instead, use multiprocessing.
+
+================== Threads vs Processes ==================
+--- Threads ----
+Multiple Threads - one single Process
+All threads share the same memory
+Limited by the GIL
+
+Analogy:
+- Like one person doing multiple things at once (boiling water, talking on the phone, waiting for an email). They're multitasking, but still one brain.
+
+In Python, threads share the same memory space, so they can easily share data. 
+But Python has a limit called the GIL (Global Interpreter Lock) — it allows only one thread to execute Python code at a time. 
+So multithreading is best for I/O-bound tasks, not CPU-heavy work.
+
+LOW overhead
+
+---- Processes -------
+Multiple processes, each has its own memory space.
+No GIL limit — each process runs independently on different CPU cores.
+Best for CPU-bound tasks (e.g., image processing, complex math, data crunching).
+
+Analogy:
+- Like having multiple people doing different tasks in parallel — each with their own brain. They don’t share memory easily but work simultaneously.
+
+HIGHER overhead (spawning processes)
+
+========================== Async Await =====================================
+
+Why async/await Can Be Better:
+1) The GIL only affects Python code — and most I/O tasks (like waiting for a response or file read) 
+2) Don’t use CPU, so async I/O can switch tasks efficiently without threads.
+3) Asyncio uses an event loop to handle many I/O tasks in a single thread → no thread-safety issues, less overhead.
+4) You can run thousands of tasks with asyncio, but spawning thousands of threads would be a mess.
+
+Use async/await when:
+1) You’re doing lots of network requests (e.g., web scraping, API calls).
+2) You want efficient memory and performance.
+3) You’re okay using async libraries (aiohttp, aiomysql, etc.).
+
+===============================================
+
+Recommendations for Processes, Threads, Async:
+
+✅ Use async/await for high-performance I/O-bound tasks
+✅ Use threading if you're using blocking libraries or mixing CPU and I/O
+- A blocking library is one where functions stop the program until they’re done. (Need to offload to a Thread)
+🚫 Don’t use threading for CPU-bound tasks — use multiprocessing
+
